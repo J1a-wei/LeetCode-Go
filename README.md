@@ -1,2 +1,3 @@
 # LeetCode-Go
-LeetCode_Golang刷题记录
+**That's my LeetCode records by golang**
+
