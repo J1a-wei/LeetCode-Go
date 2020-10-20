@@ -7,43 +7,26 @@ import "math"
 
 // 暴力解法 n^2 枚举宽
 func largestRectangleAreaForce(heights []int) int {
-	result := 0.0
-	for i := 0; i < len(heights); i++ {
-		var minHeight float64 = math.MaxFloat64
-		for j := i; j < len(heights); j++ { // 这步实际上是固定了宽度
-			minHeight = math.Min(minHeight, float64(heights[j]))
-			result = math.Max(result, minHeight*float64(j-i+1))
-		}
-	}
+	    result := 0 
+    for i := 0; i < len(heights); i ++ {
+        h := heights[i]
+        l,r := i,i
+        for ; l >=0 ; l -- {
+            if heights[l] < heights[i]{
+                break
+            }
+        }
 
-	return int(result)
+        for;r < len(heights); r ++ {
+            if heights[r] < heights[i]{
+                break
+            }
+        }
 
-}
-
-// 暴力解法 n^2 枚举高
-
-func largestRectangleAreaForce2(heights []int) int {
-	result := 0.0
-	for mid := 0; mid < len(heights); mid++ {
-
-		height := heights[mid]
-
-		left, right := mid, mid
-
-		for left-1 >= 0 && heights[left-1] >= height { // 这种写法要记住，我们直接让变量等于我们想要比对的元素即可
-			left--
-
-		}
-
-		for right+1 < len(heights) && heights[right+1] >= height {
-			right++
-		}
-
-		result = math.Max(result, float64(height)*float64(right-left+1))
-
-	}
-
-	return int(result)
+        area :=  (r - l  - 1) * h
+        result = max(area,result) 
+    }
+    return result
 
 }
 
@@ -54,7 +37,8 @@ func largestRectangleAreaForceStack(heights []int) int {
 	mono_stack := []int{}
 
 	for i := 0; i < n; i++ {
-		for len(mono_stack) > 0 && heights[mono_stack[len(mono_stack)-1]] >= heights[i] {
+		for len(mono_stack) > 0 && heights[mono_stack[len(mono_stack)-1]] >= heights[i] { 
+
 			mono_stack = mono_stack[:len(mono_stack)-1] // 弹栈
 		}
 		if len(mono_stack) == 0 {
@@ -94,4 +78,37 @@ func max(x,y int)int {
 		return x
 	}
 	return y
+}
+
+func largestRectangleAreaForceStackPrioriy(heights []int) int {
+	n := len(heights)
+
+	left , right := make([]int,n),make([]int ,n)
+
+	for i := 0; i < n; i++ {  // 如果后面元素呈现递增势，相当于右挡板都是最后那个元素 n, 我们的最优解法只会判断一次，先把初始化，假设所有右挡板都是n
+		right[i] = n
+	}
+
+	mono_stack := []int{}
+	for i := 0 ; i < n; i ++ {
+		for len(mono_stack) > 0 && heights[mono_stack[len(mono_stack) - 1]] >= heights[i]{
+			right[mono_stack[len(mono_stack) - 1]] = i
+			mono_stack = mono_stack[: len(mono_stack) - 1]
+		}
+
+		if len(mono_stack) == 0 {
+			left[i] = -1
+		}else{
+			left[i] = mono_stack[len(mono_stack) - 1]
+		}
+		mono_stack = append(mono_stack, i)
+	}
+
+	result := 0
+
+	for i := 0; i < n; i++ {
+		result = max(result,heights[i] * (right[i] - left[i] - 1))
+	}
+	return result
+
 }
