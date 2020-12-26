@@ -31,7 +31,7 @@ func TestClimbStairs(t *testing.T){
 
 	for _,tt := range tests{
 		t.Run(tt.name,func(t *testing.T) {
-			assert.Equal(t,tt.want,climbStairs(tt.arg))
+			assert.Equal(t,tt.want,climbStairs3(tt.arg))
 		})
 	}
 }

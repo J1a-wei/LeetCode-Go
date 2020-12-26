@@ -35,7 +35,7 @@ func twoSum(nums []int, target int) []int {
 	*/
 }
 
-// 最优解  O(n)
+// 最优解  O(n) map  
 func twoSum2(nums []int,target int)[]int {
 
 	m := make(map[int]int,len(nums))

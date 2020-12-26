@@ -28,13 +28,34 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
 
 */
 func myPow(x float64, n int) float64 {
+	if n >= 0 {
+		return quickMul(x, n)
+	}
+	return 1.0 / quickMul(x, -n)
+}
+
+func quickMul(x float64, n int) float64 {
 	if n == 0 {
 		return 1
 	}
+	y := quickMul(x, n/2)
+	if n%2 == 0 {
+		return y * y
+	}
+	return y * y * x
+}
 
-	subRes := myPow(x, n/2)
+// 错误解法
+func myPow2(x float64, n int) float64 {
+	if n == 0 {
+		return 1.0
+	}
+
+	var subRes float64
 	if n < 0 {
-		subRes = 1 / subRes
+		subRes = 1.0 / myPow2(x, (-n)/2)
+	} else {
+		subRes = myPow2(x, n/2)
 	}
 
 	if n%2 == 1 {

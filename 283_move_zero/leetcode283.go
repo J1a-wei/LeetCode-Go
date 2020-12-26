@@ -1,37 +1,43 @@
-package leetcode283 
-
-
+package leetcode283
 
 // https://leetcode-cn.com/problems/move-zeroes/
 
 // 输入: [0,1,0,3,12]
 // 输出: [1,3,12,0,0]
-func moveZeroes(nums []int){
-	if len(nums) ==0 {
+func moveZeroes(nums []int) {
+	if len(nums) == 0 {
 		return
 	}
-	slow,fast := 0,0
+	slow, fast := 0, 0
 
-	for fast < len(nums){
+	for fast < len(nums) {
 		if nums[slow] != 0 {
-			slow ++
-		}else{
+			slow++
+		} else {
 			if nums[fast] != 0 {
-				nums[fast],nums[slow] = nums[slow],nums[fast]
-				slow ++
+				nums[fast], nums[slow] = nums[slow], nums[fast]
+				slow++
 			}
 		}
-		fast ++
+		fast++
 	}
 }
 
+// 暴力解法
 
-// 左边找到一个等于0的，右边找一个不等于0的 进行交换，但无法保证相对位置有序 
-func moveZeroesForce(nums []int){
-	if len(nums) ==0 {
-		return
+func moveZeroes2(nums []int) {
+	zeroCount := 0
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == 0 {
+			for j := i; j+1 < len(nums); j++ {
+				nums[j], nums[j+1] = nums[j+1], nums[j]
+			}
+			i--
+			zeroCount++
+		}
+		if i == len(nums)-zeroCount-1 {
+			return
+		}
+
 	}
-	// slow,fast := 0,0
-
-
 }
